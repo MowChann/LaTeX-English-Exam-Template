@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{style}[templates]
+\ProvidesClass{ExamJHSEngl}[templates]
 
 \LoadClass[11pt]{book}
 \usepackage[fontset=ubuntu]{ctex}

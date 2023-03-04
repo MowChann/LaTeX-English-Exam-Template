@@ -99,7 +99,8 @@
 \titlespacing*{\subsubsection}{0em}{0.1em}{0.1em}
 % 设置各级文本的编号格式
 \setlist{itemsep=0.2em,topsep=0.25em,partopsep=0pt,parsep=0pt}
-\setenumerate[1]{label=(\hspace{1.25em})~\arabic*.,leftmargin=3.5em,itemindent=0em,labelsep=0.25em,}
+% \setenumerate[1]{label=(\hspace{1.25em})~\arabic*.,leftmargin=3.5em,itemindent=0em,labelsep=0.25em,}
+\setenumerate[1]{label=\arabic*.,leftmargin=3.75em,itemindent=0em,labelsep=0.2em,}
 % \setenumerate[2]{label=(\arabic*),leftmargin=1.3em,itemindent=0em,labelsep=0.25em,}
 % \setenumerate[3]{label=(\alph*),leftmargin=1.2em,itemindent=0em,labelsep=0.25em,}
 
@@ -165,7 +166,7 @@
 
 \newcommand{\option}[3]{
     \setlength{\lengthThird}{0.31\linewidth}
-    \settowidth{\lengthX}{A.#1}	\settowidth{\lengthY}{B.#2} \settowidth{\lengthZ}{C.#3}
+    \settowidth{\lengthX}{A.#1} \settowidth{\lengthY}{B.#2} \settowidth{\lengthZ}{C.#3}
 
     \ifthenelse{\lengthtest{\lengthX > \lengthY}} {
         \setlength{\lengthMaxi}{\lengthX}
@@ -199,8 +200,8 @@
 \newlength{\lengthMax}
 
 \newcommand{\options}[4]{
-    \setlength{\lengthHalf}{0.42\linewidth}	\setlength{\lengthQuarter}{0.21\linewidth}
-    \settowidth{\lengthA}{A.#1}	\settowidth{\lengthB}{B.#2} \settowidth{\lengthC}{C.#3} \settowidth{\lengthD}{D.#4}
+    \setlength{\lengthHalf}{0.42\linewidth} \setlength{\lengthQuarter}{0.21\linewidth}
+    \settowidth{\lengthA}{A.#1} \settowidth{\lengthB}{B.#2} \settowidth{\lengthC}{C.#3} \settowidth{\lengthD}{D.#4}
 
     \ifthenelse{\lengthtest{\lengthA > \lengthB}} {
         \setlength{\lengthMax}{\lengthA}
@@ -267,7 +268,8 @@
 }}}
 
 \newcommand{\cloze}[1]{
-    \uline{ \makebox[2.5em][c]{#1} }
+    \addtocounter{#1}{1}
+    \uline{ \makebox[2.5em][c]{\arabic{#1}} }
 }
 
 \newcommand{\scores}[1]{
@@ -283,11 +285,28 @@
     —~#2
 }
 
+\newcommand{\choice}[1]{
+    \addtocounter{enumi}{1}
+    \ifshowAnswer
+        (\makebox[1.4em][c]{\textcolor{red}{#1}})~\arabic{enumi}.
+    \else
+        (\hspace{1.4em})~\arabic{enumi}.
+    \fi
+}
+
+\newcommand{\uliner}[1]{
+    % \uline{\textcolor{red}{#1}}
+    % \textcolor{red}{#1}
+    \textcolor{red}{\uline{#1}} 
+}
+
 \newcommand{\Choices}[1]{选择题\quad(共#1分)}
 \newcommand{\Written}[1]{非选择题 (共#1分)}
 \newcommand{\ReadingSection}[1]{\centerline {\textbf{#1}}}
 \newcommand{\Directions}[1]{\par{\Song #1}}
-\newcommand{\Scores}[2]{ (共#1小题；每小题#2分，共 \the\numexpr #1 * #2 \relax 分) }
+% \newcommand{\Scores}[2]{ (共#1小题；每小题#2分，共 {\number\numexpr #1 * #2 \relax} 分) }
+% \usepackage{xfp}
+\newcommand{\Scores}[2]{ (共#1小题；每小题#2分，共 \fpeval{#1*#2} 分) }
 \newcommand{\wordclass}[1]{~{\it #1}.}
 
 % \newcommand{\hlines}{
@@ -304,12 +323,89 @@
 }
 
 \newcounter{countercompletion}[enumi]
-\newcommand{\completion}[2][2]{
+% \newcommand{\completion}[2][2]{
+%     \refstepcounter{enumi}{\theenumi.}\uline{\makebox[#1cm][c]{
+%         \ifshowAnswer
+%             \textcolor{red}{#2}
+%         \else
+%             \phantom{#2}
+%         \fi
+%     }}
+% }
+
+\NewDocumentCommand\completion{O{2}O{l}m}{
+    \if#2l
     \refstepcounter{enumi}{\theenumi.}\uline{\makebox[#1cm][c]{
         \ifshowAnswer
-            \textcolor{red}{#2}
+            \textcolor{red}{#3}
         \else
             \phantom{#2}
         \fi
     }}
+    \else
+    \uline{\makebox[#1cm][c]{
+        \refstepcounter{enumi}{\theenumi}
+        \ifshowAnswer
+            \textcolor{red}{#3}
+        \else
+            \phantom{#2}
+        \fi
+    }}    
+    \fi
 }
+% \DeclareTextFontCommand{\emph}{\bfseries\underline}
+\renewcommand{\emph}[1]{\textbf{\underline{#1}}}
+% \setlist[description]{
+%   font={\sffamily\bfseries},
+%   labelsep=0pt,
+%   labelwidth=\transcriptlen,
+%   leftmargin=\transcriptlen,
+% }
+
+% \newlength{\transcriptlen}
+
+% \NewDocumentCommand {\setspeaker} { mo } {%
+%   \IfNoValueTF{#2}
+%   {\expandafter\newcommand\csname#1\endcsname{\item[#1:]}}%
+%   {\expandafter\newcommand\csname#1\endcsname{\item[#2:]}}%
+%   \IfNoValueTF{#2}
+%   {\settowidth{\transcriptlen}{#1}}%
+%   {\settowidth{\transcriptlen}{#2}}%
+% }
+
+
+
+\DeclareDocumentCommand\dia{ o m }{%
+\begin{itemize}[%
+    ,label=\IfNoValueTF {#1} {}{#1:}
+    % ,labelsep=8mm
+    ,nosep % optional
+    ,font=\color{black}
+    ,listparindent={2ex}
+    ,leftmargin={\labelwidth + 2\labelsep}
+    ]
+    \item #2
+\end{itemize}%  
+}
+
+% \usepackage{dramatist}
+
+\newcommand{\CompletionChoices}[7]{
+    \begin{minipage}[t]{.8\linewidth}
+        \begin{framed}
+            \noindent A. #1\\B. #2\\C. #3\\D. #4\\E. #5\\F. #6\\G. #7
+        \end{framed}
+    \end{minipage}
+}
+
+\newenvironment{entry}[1]{
+    \begin{list}{}{
+        \renewcommand{\makelabel}{\entrylabel}
+        \settowidth{\labelwidth}{#1:~}
+        \setlength{\leftmargin}{\labelwidth + 2\labelsep}
+        \setlength{\listparindent}{2ex}
+        \setlength{\parsep}{0.2\baselineskip}
+        \setlength{\itemsep}{0.2\baselineskip}
+    }
+}{\end{list}}
+

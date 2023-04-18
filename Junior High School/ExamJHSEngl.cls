@@ -35,23 +35,21 @@
 \usepackage[T1]{fontenc}
 
 
+% ----- 字体配置 -----
+\usepackage[T1]{fontenc}
 \setmainfont{TeX Gyre Termes}
 \newfontfamily\Serif{TeX Gyre Termes}
 
-% local
-% \newCJKfontfamily\Kai{FandolKai}
-% \newCJKfontfamily\Hei{FandolHei}
-% \newCJKfontfamily\Song{Noto Serif CJK SC}
 
-% upload
-\setCJKmainfont[Path="../fonts/"]{FZNewShuSong-Z10S.ttf}
-\setCJKfamilyfont{FZHei}[Path="../fonts/"]{FZHei-B01S.ttf}
-\setCJKfamilyfont{FZShuSong}[Path="../fonts/"]{FZNewShuSong-Z10S.ttf}
-\setCJKfamilyfont{FZXBSong}[Path="../fonts/"]{FZXiaoBiaoSong-B05S.ttf}
-\newcommand{\Hei}{\CJKfamily{FZHei}}
-\newcommand{\Song}{\CJKfamily{FZShuSong}}
-\newcommand{\XBSong}{\CJKfamily{FZXBSong}}
+% Overleaf 字体
 \newCJKfontfamily\Kai{FandolKai}
+\newCJKfontfamily\Hei{FandolHei}
+% 上传 GBK 字体
+\setCJKmainfont[Path="fonts/"]{FZNewShuSong-Z10S.ttf}
+\setCJKfamilyfont{FZShuSong}[Path="fonts/"]{FZNewShuSong-Z10S.ttf}
+\setCJKfamilyfont{FZXBSong}[Path="fonts/"]{FZXiaoBiaoSong-B05S.ttf}
+\newcommand{\XBSong}{\CJKfamily{FZXBSong}}
+\newcommand{\Song}{\CJKfamily{FZShuSong}}
 
 
 \newcommand{\annotation}{\Kai}
